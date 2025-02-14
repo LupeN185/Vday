@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang = "e">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day ❤️</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center:
+            height: 100vh;
+            background-color: pink;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+        }
+
+        h2 {
+        	color: red;
+        	margin: 20px auto;
+        	text-align: center;
+        }
+
+        /* Envelope Styling */
+        .envelope-container {
+        	position: absolute;
+        	top: 50%;
+        	left: 50%;
+        	transform: translate(-50%, -50%);
+        	cursor: pointer;
+        	z-index: 5;
+        }
+
+        .envelope-container img {
+        	width: 200px;
+        	transition: transform 0.5s ease-in-out;
+        }
+
+        #letterContainer {
+        	display: none;
+        	position: absolute;
+        	top: 50%;
+        	left: 50%;
+        	transform: translate(-50%, -50%);
+        	width: 80vw;
+        	height: 80vh;
+        	max-width: 800px;
+        	max-height: 800px;
+        	background-image: url('heart.png');
+        	background-size: contain;
+        	background-position: center;
+        	background-repeat: no-repeat;
+        	padding: 40px;
+        	color: white;
+        	text-align: left;
+        	box-sizing: border-box;
+        	overflow: auto;
+        	z-index: 10;
+        }
+
+        #letterContainer p {
+        	margin: 0 0 10px;
+        	line-height: 1.5;
+        	font-size: 18px;
+        }
+
+        /* "Click me baby!" */
+        #startSlideshowButton {
+        	display: block;
+        	margin: 20px auto;
+        	padding: 12px 24px;
+        	background-color: purple;
+        	color: white;
+        	border: none;
+        	cursor: pointer;
+        	font-size: 18px;
+        	border-radius: 8px;
+        	transition: 0.3s;
+        }
+        #startSlideshowButton:hover {
+        	background-color: darkred;
+        }
+        /* Fullscreen slideshow */
+        #slideshowContainer {
+        	display: none;
+        	position: fixed;
+        	top: 0;
+        	left: 0;
+        	width: 100vw;
+        	height: 100vh;
+        	background-size: cover;
+        	background-position: center;
+        	background-color: black;
+        	overflow: auto;
+        	z-index: 1000;
+        }
+        #slideshowContainer img {
+        	width: 100%;
+        	height: 100%;
+        	object-fit: cover;
+        	display: none;
+        }
+        /* Navigation buttons */
+        .nav-button {
+        	position: absolute;
+        	top: 50%;
+        	transform: translateY(-50);
+        	background: rgba(0, 0, 0, 0.5);
+        	color: white;
+        	border: none;
+        	cursor: pointer;
+        	font-size: 30px;
+        	padding: 20px;
+        	border-radius: 50%;
+        	z-index: 1001;
+        	display: none;
+        }
+        #prevBtn {left: 20px; }
+        #nextBtn {right: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Click the envelope to open your surprise My Princess!</h2>
+
+    <div class="envelope-container" id="envelopeContainer">
+    	<img src="envelope.png" alt="Envelope" id="envelopeImage" />
+    	<div id="heart">❤️</div>
+    </div>
+    <div id="letterContainer">
+        <p><strong>My Love,</strong></p>
+        <p>Happy Valentine's Day, my princess! six months ago I didn't even know that you'd walk into my life and make it more beautiful than I would've ever imagined.</p>
+        <p>Every moment with you is a treasure, and I can't wait for all the love-filled days ahead. You are my heart❤️, my happiness, my forever.</P>
+        <p>Forever yours, <br> Lupen/Husband</p>
+        <button id="startSlideshowButton">Click me Baby! ❤️</button>
+    </div>
+
+    <!-- Slideshow -->
+    <div id="slideshowContainer">
+    	<button class="nav-button" id="prevBtn">&#10094;</button>
+    	<img src="photo1.jpg" class="slideshow-image">
+    	<img src="photo2.jpg" class="slideshow-image">
+    	<img src="photo3.jpg" class="slideshow-image">
+    	<button class="nav-button" id="nextBtn">&#10095;</button>
+    </div>
+
+    <audio id="bgMusic" src="background.mp3" loop></audio>
+
+    <script>
+
+    	document.getElementById("envelopeContainer").addEventListener("click", openEnvelope);
+    	document.getElementById("startSlideshowButton").addEventListener("click", startSlideshow);
+    	document.getElementById("prevBtn").addEventListener("click", showPreviousImage);
+    	document.getElementById("nextBtn").addEventListener("click", showNextImage);
+
+        function openEnvelope() {
+        	console.log("Envelope clicked");
+        	document.getElementById("bgMusic").play();
+
+        	const envelopeImage = document.getElementById("envelopeImage");
+        	envelopeImage.style.transform = "translateY(-50px) scale(0)";
+
+            setTimeout(() => {
+                document.getElementById("envelopeContainer").style.display = "none";
+                document.getElementById("letterContainer").style.display = "block";
+            }, 500);
+        }
+
+        function startSlideshow() {
+        	document.getElementById("letterContainer").style.display = "none";
+        	document.getElementById("slideshowContainer").style.display = "block";
+
+        	let images = document.querySelectorAll(".slideshow-image");
+        	images[currentImageIndex].style.display = "none";
+        	currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        	images[currentImageIndex].style.display = "block";
+        	showNavButtonsTemporarily();
+        }
+
+        function showNavButtonsTemporarily() {
+        	document.getElementById("prevBtn").style.display = "block";
+        	document.getElementById("nextBtn").style.display = "block";
+
+        	clearTimeout(hideButtonsTimeout);
+        	hideButtonsTimeout = setTimeout(() => {
+        		document.getElementById("prevBtn").style.display ="none";
+        		document.getElementById("nextBtn").style.display ="none";
+        	}, 3000);
+        }
+
+        document.getElementById("slideshowContainer").addEventListener("click", showNavButtonsTemporarily);
+    </script>
+<body>
+</html>
